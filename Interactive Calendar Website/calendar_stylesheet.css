@@ -1,0 +1,159 @@
+h1 {
+    color: #000000; /* Set text color to black */
+    text-align: center; /* Center the heading horizontally */
+    text-shadow: 
+        1px 1px 2px white; /* Add a black shadow behind the text */
+    text-decoration: underline; /* Underline the heading */
+}
+
+/* General styles for the body of the page */
+body {
+    font-family: Arial, sans-serif; /* Use Arial font or fallback to sans-serif */
+    background-color: #ddddff; /* Set a light gray background color */
+    padding: 20px; /* Add padding around the content */
+    margin: 0; /* Remove the default margin around the body */
+    background: rgb(199,199,255);
+    background: radial-gradient(circle, rgba(199,199,255,1) 0%, rgba(221,221,255,1) 100%);
+}
+
+#calendar { /* hashtag indicates that I'm styling a specific element identified by its ID*/
+    display: flex; /* Use flexbox layout for the calendar */
+    flex-direction: column; /* Arrange child elements in a column */
+    border: 5px solid #ff8ab1; /* Add a border around the calendar */
+    border-radius: 8px; /* add rounded corners */
+}
+
+.button-container {
+    display: flex;         /* Enables flexbox */
+    gap: 10px;            /* Adds space between buttons */
+    justify-content: center; /* Center the buttons horizontally */
+    margin-bottom: 20px;  /* Optional: add some space below the buttons */
+}
+
+.button-container-logout{
+    display: flex;         /* Enables flexbox */
+    gap: 10px;            /* Adds space between buttons */
+    justify-content: left; /*  have button on left*/
+    margin-bottom: 20px;  /* Optional: add some space below the buttons */
+}
+
+/* Styles for the next and prev month buttons */
+.button-primary {
+    color: black; /* Set the text color to white */
+    padding: 10px 20px; /* Add padding around the button */
+    border-radius: 5px; /* Add rounded corners to the button */
+    cursor: pointer; /* Change the cursor to a pointer when hovering over the button */
+    font-size: 16px; /* Set the button text size */
+    border: 2px solid #ff8ab1; /* Add a light gray border around each day cell */
+    background-image: url('background.png'); /* Replace with your image path */
+    background-size: cover; /* Cover the entire calendar */
+    background-repeat: no-repeat; /* Prevent repeating the image */
+}
+
+/* Change the button color when hovered over */
+.button-primary:hover {
+    background-color: #ff699b; /* Make the green background darker on hover */
+}
+
+.month-display {
+    font-size: 24px;      /* Make the font larger */
+    font-weight: bold;    /* Make the text bold */
+    text-align: center;   /* Center-align the month display */
+    color: #333;          /* Change the text color */
+    border: 2px solid #ff8ab1; /* Add a border around the calendar */
+    background-image: url('background.png'); /* Replace with your image path */
+    background-size: cover; /* Cover the entire calendar */
+    background-repeat: no-repeat; /* Prevent repeating the image */
+    padding: 10px; /* Add padding around the button */
+}
+
+
+.calendar-header {
+    display: grid; /* Use CSS grid layout for the calendar header */
+    grid-template-columns: repeat(7, 1fr); /* Create 7 equal columns for the days of the week */
+    text-align: center; /* Center-align text in the header */
+    font-weight: bold; /* Make the text bold for visibility */
+}
+
+.calendar-grid {
+    display: grid; /* Use CSS grid layout for the calendar grid */
+    grid-template-columns: repeat(7, 1fr);  /* Create 7 equal columns for each day of the week */
+    grid-auto-rows: minmax(100px, auto); /* Each day cell can grow but has a minimum height */
+    gap: 0px; /* Space between cells */
+}
+
+.day {
+    flex: 1; /* Allow each day to grow and fill available space equally */
+    text-align: center; /* Center-align text within the day */
+    padding: 10px; /* Add padding inside each day cell for spacing */
+    border: 2px solid #ff8ab1; /* Add a light gray border around each day cell */
+    background-image: url('background.png'); /* Replace with your image path */
+    background-size: cover; /* Cover the entire calendar */
+    background-repeat: no-repeat; /* Prevent repeating the image */
+}
+
+.day-cell {
+    border: 2px solid #ff8ab1; /* Add a slightly darker border around each day cell */
+    display: flex; /* Use flexbox layout to center content within the day cell */
+    justify-content: right; /* Center the content horizontally */
+    align-items: top; /* Center the content vertically */
+    padding: 10px; /* Add padding inside each day cell for spacing */
+    cursor: pointer; /* Change cursor to pointer to indicate clickable items */
+    background-image: url('background.png'); /* Replace with your image path */
+    background-size: cover; /* Cover the entire calendar */
+    background-repeat: no-repeat; /* Prevent repeating the image */
+}
+
+
+.day-cell.other-month {
+    color: #aaa; /* Dim the text for days outside the current month */
+}
+
+
+.events-container {
+    height: auto; /* Ensure it collapses when empty */
+    padding: 1; /* Remove any unwanted padding */
+    margin: 0; /* Remove any unwanted margins */
+    border: none; /* Border around the container */
+    border-radius: 5px; /* Rounded corners */
+    background-color: none; /* Light background */
+    font-family: 'Arial', sans-serif; /* Same font for events */
+    font-size: 12px; /* Smaller font size for events */
+
+    display: flex;
+    flex-direction: column; /* Stack events vertically */
+    margin-top: 5px; /* Add some space between the day cell and events */
+    margin-right: 3px;
+}
+
+.events-container button {
+    padding: 8px 12px; /* Space inside the button */
+    margin-top: 5px; /* Space above the button */
+    border: none; /* Remove default border */
+    border-radius: 4px; /* Rounded corners */
+    background-color: #aaaaff; /* Primary button color */
+    color: #fff; /* Text color */
+    cursor: pointer; /* Pointer on hover */
+    transition: background-color 0.3s; /* Smooth color transition */
+    font-size: 10px; /* Smaller button text */
+    padding: 2px 4px; /* Adjust button padding */
+    margin-left: 5px; /* Space between text and button */
+}
+
+.events-container button:hover {
+    background-color: #8080d5; /* Darker shade on hover */
+}
+
+.events-container button:active {
+    background-color: #5d5db2; /* Even darker on click */
+}
+
+
+.event-item {
+    background-color: #d8d8ff; /* Light background for each event */
+    padding: 5px; /* Padding inside each event */
+    margin: 2px 0; /* Space between events */
+    border-radius: 3px; /* Rounded corners */
+    font-size: smaller; /* Make text smaller to fit better */
+    border: 2px solid #aaaaff; /* Border around the container */
+}

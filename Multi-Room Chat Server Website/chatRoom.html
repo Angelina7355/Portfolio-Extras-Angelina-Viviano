@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>   
+<style type="text/css">
+
+#currentRoom {
+  margin-top: 5pt;
+  text-align: center;
+  font-size: 24pt; /* Increased font size for better prominence */
+  font-weight: 700; /* Make the text bold */
+  color: #8e67a5; /* Stronger, more solid color */
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2), 0 0 25px rgba(142, 103, 165, 0.6); /* Subtle shadow for depth */
+  letter-spacing: 2px; /* Slight spacing between characters */
+  padding: 15px; /* Add padding around the text for better spacing */
+  border-radius: 8px; /* Slightly round the edges for a modern look */
+  background: linear-gradient(135deg, rgb(107, 184, 191), rgb(83, 146, 152)); /* Gradient background */
+}
+
+#chat-container {
+    display: flex;  /* Use flexbox */
+    justify-content: space-between;  /* Spread out the containers */
+    gap: 20px; /* Adds space between the two containers */
+}
+
+/* Chat log container with a bubble look */
+#chatlog {
+    display: flex; /* Use flexbox */
+    flex-direction: column; /* Stack messages vertically */
+    align-items: flex-start; /* Align items to the start */
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: rgba(220, 189, 238, 0.9); /* Light background for the chat area */
+    border-radius: 15px;
+    overflow-y: auto;  /* Allows scrolling when there are too many messages */
+    height: 300px;     /* Fixed height for the message box */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Optional: adds shadow around the bubble */
+}
+
+/* Different background colors for #chatlog */
+.chatlog-pink {
+    background-color: #ff00e1 !important;
+}
+
+.chatlog-green {
+    background-color: #00f000 !important;
+}
+
+.chatlog-blue {
+    background-color: #001cf0 !important;
+}
+
+/* Style for individual message bubbles */
+#chatlog div {
+    background-color: #fff;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 15px;
+    max-width: 90%;
+    box-sizing: border-box;
+}
+
+/* Different styles for the username and message content */
+#chatlog div span.username {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+/* Aligning messages for the user */
+#chatlog div.user-message {
+    background-color: #d1f7d1; /* Green background for user messages */
+    align-self: flex-start;
+}
+
+/* Aligning messages for others */
+#chatlog div.other-message {
+    background-color: #f0f0f0; /* Light gray background for other users */
+    align-self: flex-end;
+}
+
+
+#rooms {
+  display: flex; /* Use flexbox */
+  flex-direction: column; /* Stack messages vertically */
+  align-items: flex-start; /* Align items to the start */
+  width: 100%;
+  max-width: 200px;
+  margin-left: auto;
+  padding: 10px;
+  background-color: rgb(107, 184, 191); /* Light background for the chat area */
+  border-radius: 5px;
+  overflow-y: auto;  /* Allows scrolling when there are too many messages */
+  height: 80px;     /* Fixed height for the message box */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Optional: adds shadow around the bubble */
+}
+
+#rooms_text {
+      font-size: 20px;
+      color: white;
+      margin-bottom: 5px;
+    }
+
+/* Style for room buttons */
+#rooms button {
+    background-color: rgba(220, 189, 238, 0.9); /* Blue background */
+    color: white; /* White text */
+    border: none; /* Remove default border */
+    padding: 10px 20px; /* Padding to make the button bigger */
+    margin: 5px; /* Space between buttons */
+    font-size: 14px; /* Text size */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    width: 100%; /* Make button fill the width of its container */
+}
+
+/* Button hover effect */
+#rooms button:hover {
+    background-color: rgba(193, 157, 214, 0.9); /* Darker blue on hover */
+}
+
+/* Optional: Change the background of the current room button */
+#rooms button.active {
+    background-color: rgba(142, 103, 165, 0.9); /* Green background for the current room */
+}
+
+/* Style for users in the room */
+#userList {
+      display: flex; /* Use flexbox */
+      flex-direction: column; /* Stack messages vertically */
+      align-items: flex-start; /* Align items to the start */
+      width: 100%;
+      max-width: 200px;
+      margin-left: auto;
+      padding: 10px;
+      background-color: rgb(107, 184, 191); /* Light background for the chat area */
+      border-radius: 5px;
+      overflow-y: auto;  /* Allows scrolling when there are too many messages */
+      height: 300px;     /* Fixed height for the message box */
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Optional: adds shadow around the bubble */
+      font-size: 15pt;
+      color: white;
+    }
+
+    #userList li {
+      padding: 5px;
+      font-size: 14px;
+      color: #333;
+      margin-left: 10pt;
+
+    }
+
+    #userList li button {
+      background-color: grey; /* Blue background */
+      color:  black ; /* White text */
+      border: none; /* Remove default border */
+      padding: 5px 10px; /* Padding to make the button bigger */
+      margin-left: 10pt; /* Space between buttons */
+      font-size: 8px; /* Text size */
+      text-align: center;
+      border-radius: 5px; /* Rounded corners */
+      cursor: pointer; /* Pointer cursor on hover */
+      width: 30%; /* Make button fill the width of its container */
+    }
+
+    #userList li.active {
+      font-weight: bold;
+    }
+
+    .direct-message {
+    color: #007bff; /* Blue color for private messages */
+    font-style: italic;
+    padding-left: 10px;
+  }
+
+  .system-message {
+    background-color: #f0f0f0;   /* Light gray background */
+    color: #555555;              /* Dark gray text color */
+    font-style: italic;          /* Italic text to indicate system messages */
+    font-size: 8px;             /* Font size */
+    padding: 10px 15px;          /* Padding around the message */
+    border-radius: 5px;          /* Slight rounded corners */
+    margin: 5px 0;               /* Margin to separate from other messages */
+    text-align: center;          /* Center-align the message */
+    border: 1px solid #dddddd;   /* Light border around the message */
+}
+
+body{
+	width: 760px; /* how wide to make web page */
+	background-color: rgb(131, 221, 229); /* what color to make the background */
+	margin: 0 auto;
+	padding: 0;
+	font:12px/16px Verdana, sans-serif; /* default font */
+}
+   </style>
+   </head>
+
+   <body>
+
+    <div id = "currentRoom"></div>
+    <br><br>
+
+    <!-- Prompt to create a room -->
+    <label for="roomName">Create your own room:</label>
+    <br>
+    <input type="text" id="roomName" placeholder="Enter room name" />
+    <!-- Button to create the room -->
+    <button onclick="createRoom()">Create Room</button>
+    <br><br>
+
+    <!-- Radio buttons for room privacy (Public/Private) -->
+    <input type="radio" id="publicRoom" name="privacy" value="public" checked>
+    <label for="publicRoom">Public</label>
+    <br>
+    <input type="radio" id="privateRoom" name="privacy" value="private">
+    <label for="privateRoom">Private</label>
+    <br><br>
+
+    <!-- Password field for private room -->
+    <label for="roomPassword" id="passwordLabel" style="display: none;">Enter a password for private room:</label>
+    <input type="password" id="roomPassword" style="display: none;" placeholder="Enter password" />
+
+    <div id="rooms"></div>
+
+    <span style="font-size: 24px; font-weight: bold;">Messages:</span>
+    <br><br>
+
+    <div id="chat-container">
+        <div id="chatlog"></div> <!-- Chat log area -->
+        <ul id="userList"></ul> <!-- List of users -->
+    </div>
+
+    <span style="font-size: 12px">Write out a message!:</span>
+    <br><br>
+      <input type="text" id="message_input"/>
+      <button onclick="sendMessage()">send</button>
+      <br><br>
+
+    <!-- buttons for actions on a specific user -->
+      <div id="actionButtons" style="display: none;">
+        <button id="dmButton">Direct Message</button>
+        <div id="dmInputContainer" style="display: none;">
+            <input type="text" id="dmInput" placeholder="Type your message here..." />
+            <button id="sendDmButton">Send DM</button>
+        </div>
+    </div>
+
+    <div id="ownerAction" style="display: none;">
+      <button id="kickButton">Kick User</button>
+      <button id="banButton">Ban User</button>
+      <br><br>
+
+    </div>
+
+    <div id="customize" style = "display: none;">
+      Customize chat background:
+      <button id = "option_1">Option 1</button>
+      <button id = "option_2">Option 2</button>
+      <button id = "option_3">Option 3</button>
+      <button id = "default">Default</button>
+    </div>
+
+      <script src="/socket.io/socket.io.js"></script>
+      <script>
+
+      document.querySelectorAll('input[name="privacy"]').forEach((radio) => { // This code is for creating a public or private room
+          radio.addEventListener("change", function () {
+              if (this.value === "private") {
+                  // Show the password input and label if "Private" is selected
+                  document.getElementById("passwordLabel").style.display = "block";
+                  document.getElementById("roomPassword").style.display = "block";
+              } else {
+                  // Hide the password input and label if "Public" is selected
+                  document.getElementById("passwordLabel").style.display = "none";
+                  document.getElementById("roomPassword").style.display = "none";
+              }
+          });
+      });
+
+      // CLIENT SIDE OF CHAT (runs on the user's browser and communicates with Node.js server using socket.io)
+
+      let socketio = io.connect();
+      let user = prompt("Enter your name (or leave blank for guest):", "guest") || "guest";
+      let theme = null;
+
+      if (user === "guest") {
+          // Generate a random 3-digit number
+          const randomNum = Math.floor(Math.random() * 900) + 100;  
+          user = `guest${randomNum}`;  // Append the random number to "guest"
+      }
+
+      console.log("Username set as:", user); // Log to confirm username is captured
+      let currentRoom = "Main";  // Track the current room
+      let owner = "server";
+
+      // Emit the username to the server
+      socketio.emit('set_username', { username: user });
+
+      // Join default room on connection
+      socketio.emit("join_room", { currentRoom: currentRoom });
+
+      // Update the current room display
+      document.getElementById("currentRoom").textContent = `Current Room: ${currentRoom}`;
+
+      document.getElementById("option_1").onclick = () => {
+                  theme = "pink";
+                  socketio.emit("set_color",{name: currentRoom, color: theme});
+                }
+                document.getElementById("option_2").onclick = () => {
+                  theme = "green";
+                  socketio.emit("set_color",{name: currentRoom, color: theme});
+                }
+                document.getElementById("option_3").onclick = () => {
+                  theme = "blue";
+                  socketio.emit("set_color",{name: currentRoom, color: theme});
+                }
+                document.getElementById("default").onclick = () => {
+                  theme = null;
+                  socketio.emit("set_color",{name: currentRoom, color: theme});
+                }
+
+      // Clear chatlog on room switch
+      function clearChatLog() {
+          const chatlog = document.getElementById("chatlog");
+          chatlog.innerHTML = ''; // Clear all previous messages
+      }
+
+      // Listen for room list updates from server
+      socketio.on("room_list", function(roomList) {
+        const roomsDiv = document.getElementById("rooms");
+        roomsDiv.innerHTML = '';  // Clear previous rooms
+
+      // Re-add the "Available rooms:" text
+        const roomsText = document.createElement("div");
+        roomsText.id = "rooms_text";
+        roomsText.textContent = "Available rooms:";
+        roomsDiv.appendChild(roomsText); // Append the rooms_text div
+
+            roomList.forEach(room => {    // for every room listed in roomList...
+            const roomButton = document.createElement("button");
+            roomButton.textContent = room.name + (room.isPrivate ? " (Private)" : "");
+            roomButton.onclick = () => joinRoom(room.name, room.isPrivate ? "fail" : null, room.host, room.blackList, room.color);  // Click to join room
+            roomsDiv.appendChild(roomButton);
+
+            // Mark the current room button as active
+            if (room.name === currentRoom) {
+              roomButton.classList.add("active");
+            }
+
+        });
+      });
+
+      // Listen for the updated user list specific to the current room
+      socketio.on("update_user_list", function(userList) {
+          const userListDiv = document.getElementById("userList");
+          userListDiv.innerHTML = ""; // Clear existing user list
+
+          const userText = document.createElement("div");
+          userText.textContent = "Users in this room:";
+          userListDiv.appendChild(userText)
+
+          // Add users only for the current room
+          userList.forEach((username) => {
+              if(owner === user){
+                document.getElementById("customize").style.display = "block";
+              }
+              else{
+                document.getElementById("customize").style.display = "none";
+              }
+              const userItem = document.createElement("li");
+              userItem.textContent = username; // Display the username
+              if (username === user) { // Highlight the current user
+                  userItem.classList.add("active");
+                  userListDiv.appendChild(userItem);
+              }
+              else{
+                // Create a button for each user
+                const userButton = document.createElement("button");
+                userButton.classList.add("userButton");
+                userButton.textContent = `Action`;
+
+
+                // Global variable to store the selected username for DM, kick, or ban actions
+                let selectedUser = null;      
+                userButton.onclick = () => {
+                    if (owner === user){
+                      document.getElementById("ownerAction").style.display = "block";
+                    }
+
+                    console.log(`Button clicked for ${username}`);
+                    // Here you can add functionality, such as sending a message to that user or performing other actions
+                    selectedUser = username; // Save selected user's name for actions
+
+                    // Display the action buttons at the bottom
+                    document.getElementById("actionButtons").style.display = "block";
+
+                    // Hide DM input initially
+                    document.getElementById("dmInputContainer").style.display = "none";
+                };
+
+                // Event listener for the DM button to show the DM input field
+                document.getElementById("dmButton").onclick = () => {
+                    document.getElementById("dmInputContainer").style.display = "block";
+                };
+
+                // Event listener for the Send DM button to send the message
+                document.getElementById("sendDmButton").onclick = () => {
+                    const message = document.getElementById("dmInput").value;
+                    document.getElementById("dmInput").value = ''; // Clear the input
+                    document.getElementById("actionButtons").style.display = "none";
+                    document.getElementById("ownerAction").style.display = "none";
+
+                    if (message && selectedUser) {
+                        socketio.emit("direct_message", { fromUser: user, toUser: selectedUser, message: message, currentRoom });
+                        console.log(`Sent DM to ${selectedUser} from ${user}: ${message}`);
+                    }
+                };
+  
+
+
+                // Event listener for Kick button (implement kick functionality here)
+                document.getElementById("kickButton").onclick = () => {
+                    document.getElementById("actionButtons").style.display = "none";
+                    document.getElementById("ownerAction").style.display = "none";
+                    console.log(`Kicking user: ${selectedUser}`);
+                    socketio.emit("kick_user", { toUser: selectedUser, room: currentRoom });
+                };
+
+                // Event listener for Ban button (implement ban functionality here)
+                document.getElementById("banButton").onclick = () => {
+                  document.getElementById("actionButtons").style.display = "none";
+                  document.getElementById("ownerAction").style.display = "none";
+                  console.log(`Banning user: ${selectedUser}`);
+                  socketio.emit("ban_user", { toUser: selectedUser, room: currentRoom });
+                };
+                userListDiv.appendChild(userItem);
+                userItem.appendChild(userButton);
+              }
+          });
+      });
+
+      socketio.on("receive_color", function(color) {
+          theme = color;
+      });
+
+      socketio.on("message_to_client", function(data) {
+        console.log("Message data received:", data);
+
+        if (data.message && data.message.trim() !== "") {
+            let chatlogContainer = document.getElementById("chatlog");
+
+            // Clear previous color classes
+            chatlogContainer.classList.remove("chatlog-pink", "chatlog-green", "chatlog-blue");
+            // Add new color class based on data.color
+            socketio.emit("get_color", currentRoom); 
+            if (theme === "pink") {
+                chatlogContainer.classList.add("chatlog-pink");
+            } else if (theme === "green") {
+                chatlogContainer.classList.add("chatlog-green");
+            } else if (theme === "blue") {
+                chatlogContainer.classList.add("chatlog-blue");
+            }
+
+            // Create and append the message bubble
+            let messageDiv = document.createElement("div");
+            messageDiv.classList.add("message");
+
+            if (data.username === 'System') {
+                messageDiv.classList.add("system-message");
+                messageDiv.textContent = `${data.username}: ${data.message}`;
+            } else if (data.isDirectMessage) {
+                messageDiv.classList.add("direct-message");
+                messageDiv.textContent = `[Private] ${data.username}: ${data.message}`;
+            } else if (data.room === currentRoom) {
+                messageDiv.textContent = `${data.username}: ${data.message}`;
+            }
+
+            chatlogContainer.appendChild(messageDiv);
+          } 
+          else {
+              console.log("Empty message received, not sending.");
+          }
+      });
+
+
+      socketio.on("password_check_result", function(response) {
+        if (response.success) {
+            console.log("Password correct. Successfully joined the private room.");
+            socketio.emit("join_room", { currentRoom: currentRoom });
+            clearChatLog(); // Clear messages from the previous room
+            // Proceed with room joining logic
+            // Update the current room display
+            document.getElementById("currentRoom").textContent = `Current Room: ${room}`;
+            
+
+            // Remove the 'active' class from all room buttons
+            const roomButtons = document.querySelectorAll("#rooms button");
+            roomButtons.forEach(button => {
+                button.classList.remove("active");
+            });
+
+            // Add the 'active' class to the clicked room button
+            const activeRoomButton = Array.from(roomButtons).find(button => button.textContent === room);
+            if (activeRoomButton) {
+                activeRoomButton.classList.add("active");
+            }
+        } 
+        else {
+            alert("Incorrect password.");
+            // Automatically join the "Main" room after being kicked
+            socketio.emit("join_room", { currentRoom: "Main" });
+
+            currentRoom = "Main";
+            owner = "server";
+            theme = null;
+            clearChatLog(); // Clear messages from the previous room
+            // Proceed with room joining logic
+            // Update the current room display
+            document.getElementById("currentRoom").textContent = `Current Room: ${currentRoom}`;
+            
+
+            // Remove the 'active' class from all room buttons
+            const roomButtons = document.querySelectorAll("#rooms button");
+            roomButtons.forEach(button => {
+                button.classList.remove("active");
+            });
+
+            // Add the 'active' class to the clicked room button
+            const activeRoomButton = Array.from(roomButtons).find(button => button.textContent === currentRoom);
+            if (activeRoomButton) {
+                activeRoomButton.classList.add("active");
+            }
+
+        }
+      });
+
+      // Join a specified room
+      function joinRoom(room, pass, host, blackList, color) {
+        currentRoom = room;  // Update current room
+        password = pass;
+        theme = color;
+        owner = host;
+        if (host === user){
+          socketio.emit("join_room", { currentRoom: currentRoom });
+          clearChatLog(); // Clear messages from the previous room
+        // Proceed with room joining logic
+        // Update the current room display
+          document.getElementById("currentRoom").textContent = `Current Room: ${room}`;
+          
+
+          // Remove the 'active' class from all room buttons
+          const roomButtons = document.querySelectorAll("#rooms button");
+          roomButtons.forEach(button => {
+              button.classList.remove("active");
+          });
+
+          // Add the 'active' class to the clicked room button
+          const activeRoomButton = Array.from(roomButtons).find(button => button.textContent === room);
+          if (activeRoomButton) {
+              activeRoomButton.classList.add("active");
+          }
+        }
+        else{
+          if (blackList.includes(user)) {
+            alert("You are banned from this room and cannot join.");
+            currentRoom = "Main";
+            owner = "server";
+            theme = null;
+            return;  // Stop the function if the user is banned
+          }
+              // Check if the room is private
+          if(password){
+                // If it's a private room and no saved password, prompt the user to enter it
+            const enteredPassword = prompt("Enter the password for the private room:");
+            socketio.emit("check_password", { room: room, password: enteredPassword });
+          }
+          else{
+            socketio.emit("join_room", { currentRoom });
+            console.log(`joining room: ${room}`);
+            clearChatLog(); // Clear messages from the previous room
+            // Update the current room display
+            document.getElementById("currentRoom").textContent = `Current Room: ${room}`;
+            
+
+            // Remove the 'active' class from all room buttons
+            const roomButtons = document.querySelectorAll("#rooms button");
+            roomButtons.forEach(button => {
+                button.classList.remove("active");
+            });
+
+            // Add the 'active' class to the clicked room button
+            const activeRoomButton = Array.from(roomButtons).find(button => button.textContent === room);
+            if (activeRoomButton) {
+                activeRoomButton.classList.add("active");
+            }
+          }
+        }
+      }
+
+        socketio.on("kicked", function(data) {
+            alert(data.message);  // Display the message from the server
+
+            // Automatically join the "Main" room after being kicked
+            socketio.emit("join_room", { currentRoom: "Main" });
+
+            // Update the current room and refresh the UI (implement `updateRoomUI` to reflect the change)
+            currentRoom = "Main";
+            owner = "server";
+            theme = null;
+            clearChatLog(); // Clear messages from the previous room
+            // Proceed with room joining logic
+            // Update the current room display
+            document.getElementById("currentRoom").textContent = `Current Room: ${currentRoom}`;
+            
+
+            // Remove the 'active' class from all room buttons
+            const roomButtons = document.querySelectorAll("#rooms button");
+            roomButtons.forEach(button => {
+                button.classList.remove("active");
+            });
+
+            // Add the 'active' class to the clicked room button
+            const activeRoomButton = Array.from(roomButtons).find(button => button.textContent === currentRoom);
+            if (activeRoomButton) {
+                activeRoomButton.classList.add("active");
+            }
+        });
+
+        socketio.on("banned", function(data) {
+            alert(data.message);  // Display the ban notification
+        });
+      
+      function sendMessage() {
+         let msg = document.getElementById("message_input").value;
+         document.getElementById("message_input").value = '';
+         console.log("Sending message with username:", user); // Log to confirm username is used
+         socketio.emit("message_to_server", { message: msg, username: user, currentRoom});
+
+      }
+
+      function createRoom(){
+        let name = document.getElementById("roomName").value;
+        let access = document.querySelector('input[name="privacy"]:checked').value;
+        let pass = document.getElementById("roomPassword").value;
+
+        if (!name) {
+        alert("Please enter a room name.");
+        return;
+        }
+
+        // If the room is private, ensure a password is provided
+        if (access === "private" && !pass) {
+            alert("Please enter a password for the private room.");
+            return;
+        }
+
+
+        console.log("Room name:", name);
+        console.log("Room privacy:", access);
+        console.log("Room password:", access === "private" ? pass : "None");
+
+        document.getElementById("roomName").value = '';
+        document.getElementById("roomPassword").value = '';
+        document.querySelector('input[name="privacy"][value="public"]').checked = true;  // Set to public by default
+
+        currentRoom = name;
+        owner = user;
+
+        socketio.emit("create", {rN:name, privacy: access, password: pass, owner: user, color: null});
+
+        // Update the current room display
+        document.getElementById("currentRoom").textContent = `Current Room: ${currentRoom}`;
+        joinRoom(currentRoom, pass, owner, []); // Automatically join the new room after creating it
+      }
+      </script>
+   </body>
+</html>

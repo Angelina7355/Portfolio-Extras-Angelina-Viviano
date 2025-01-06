@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head> <title> Login HTML Form </title> </head>
+<body>
+    Welcome to our page! Please login below:
+    <form name = "input" action = "login.php" method = "POST">
+        <p>
+            <label for = "userNameInput">Username:</label>
+            <input type = "text" name = "username" id="userNameInput" >
+        </p>
+
+        <p>
+            <label for ="userPasswordInput">Password:</label>
+            <input type = "text" name = "password" id = "userPasswordInput">
+        </p>
+        
+        <p>
+            <input name = "submit" type = "submit" value = "Login" >
+        </p>
+
+    </form>
+
+    <form name = "input" action = "guest_page.php" method = "POST">
+        <p>
+            <input name = "guest" type = "submit" value = "Sign in as Guest" >
+
+        </p>
+
+    </form>
+
+
+    <a href="create_account.php">Create an account</a>
+
+
+
+</body>
+</html>

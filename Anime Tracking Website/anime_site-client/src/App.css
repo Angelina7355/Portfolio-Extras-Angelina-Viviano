@@ -1,0 +1,295 @@
+/* Reset some default browser styles */
+body, ul, h1, h2, p {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+  }
+
+  h3 {
+    font-size: 40px;
+    color: #6b6381
+  }
+  body {
+    background-color: #fec9c1;
+    color: #333;
+  }
+  button {
+    padding: 0.5rem 1rem;
+    background-color: #ff6f61;;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0.5rem; /* Add space between buttons */
+  }
+
+  button:hover {
+    background-color: #d55c51;
+  }
+
+  input[type="checkbox"] {
+    accent-color: #857c9c; /* Change this to your desired color */
+}
+  /* General container styles */
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .app-header {
+    background-color: #ff6f61;
+    color: white;
+    padding: 1rem;
+
+    display: flex;
+    align-items: center; /* Align items vertically */
+    justify-content: center; /* Center items horizontally */
+    gap: 0.5rem; /* Space between logo and title */
+  }
+  
+  .header-logo {
+    height: 40px; /* Adjust the size of the logo */
+    width: auto; /* Maintain aspect ratio */
+  }
+
+  .app-header h1 {
+    font-family: 'Pacifico', cursive; 
+    font-size: 2.5rem; 
+  }
+  
+  .main-content {
+    flex: 1;
+    padding: 1rem;
+  }
+  
+  footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+  }
+  
+  /* Search bar section */
+  .search-section {
+    margin-bottom: 2rem;
+    border: 1px solid #857c9c;
+    background-color: #d4cee2;
+    padding: 0.5rem;
+    border-radius: 4px;
+  }
+  
+  .search-bar input {
+    padding: 0.5rem;
+    margin-right: 0.5rem;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    width: 250px;
+  }
+  
+  .search-bar button {
+    padding: 0.5rem 1rem;
+    background-color: #ff6f61;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .search-bar button:hover {
+    background-color: #d55c51;
+  }
+  
+  /* Search results & watchlist */
+  .anime-item {
+    margin: 0.5rem 0;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .anime-item button {
+    padding: 0.3rem 0.6rem;
+    border: none;
+    background-color: #857c9c;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .anime-item button:hover {
+    background-color: #756b8f;
+  }
+  
+  /* Login section */
+  .login-section {
+    margin-top: 2rem;
+  }
+  
+  .login-section form div {
+    margin-bottom: 1rem;
+  }
+  
+  .login-section form input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+  }
+
+  
+  /* Watchlist section */
+  .watchlist ul, .search-results ul, .watched li, .favorites-section li {
+    padding: 0;
+  }
+  
+  .watchlist li, .search-results li, .watched li, .favorites-section li {
+    background-color: white;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+/* Layout for the two sections */
+.top-anime, .recommended-anime {
+    padding: 1rem;
+    border-radius: 8px;
+    width: 50%; /* Take up half the space of the parent container */
+    box-sizing: border-box; /* Ensure padding doesn't cause overflow */
+    border: 1px solid #857c9c;
+    background-color: #d4cee2;
+  }
+  
+  h2 {
+    margin-bottom: 1rem;
+  }
+  
+  ul {
+    list-style: none;
+  }
+  
+  ul li {
+    margin-bottom: 0.5rem;
+  }
+  
+  ul li strong {
+    display: inline-block;
+    margin-right: 0.5rem;
+  }
+  
+  /* New container for aligning the two sections */
+  .top-recommendation-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 2%; /* Optional: space between columns */
+    margin-top: 2rem; /* Add space above the sections if needed */
+  }
+  
+  .top-recommendation-container .top-anime,
+  .top-recommendation-container .recommended-anime {
+    width: 48%; /* Ensure the two sections are side by side */
+  }
+
+
+
+
+  /* Search Section Layout */
+.search-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* Search Bar */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;  /* Space between input and button */
+  }
+  
+  /* Genre Selection (Buttons Inline) */
+  .genre-selection {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap; /* Allow wrapping if too many buttons */
+  }
+  
+  .genre-selection label {
+    font-weight: bold;
+  }
+
+
+
+  .profile-section {
+    border: black;
+    border-radius: 20px;
+  }
+
+
+
+
+
+
+
+
+  .more-anime-section {
+    width: 100%; /* Full width */
+    background-color: #ffffff; /* Box background color */
+    border-top: 2px solid #ddd; /* Optional: Border at the top for separation */
+    padding: 1rem; /* Padding inside the box */
+    box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1); /* Optional: Box shadow for depth */
+    box-sizing: border-box; /* Include padding in the width calculation */
+    border-radius: 8px;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #857c9c;
+    background-color: #d4cee2;
+  }
+  
+  .more-anime-section h1 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: #333; /* Text color */
+  }
+  
+  .more-anime-section ul {
+    list-style: none; /* Remove default bullet points */
+    padding: 0;
+    margin: 0;
+  }
+  
+  .more-anime-section li {
+    margin-bottom: 0.1rem; /* Spacing between list items */
+    padding: 0.5rem 0; /* Padding for individual items */
+    border-bottom: 1px solid #857c9c; /* Optional: Separator between list items */
+  }
+  
+  .more-anime-section span {
+    font-size: 1rem; /* Adjust font size */
+    color: #555; /* Adjust text color */
+  }
+  
+  .more-anime-section button {
+    padding: 0.5rem 1rem;
+    background-color: #ff6f61;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .more-anime-section button:hover {
+    background-color: #e65b50; /* Darker hover effect */
+  }
+  
+  .more-anime-section .anime-details {
+    margin-top: 0.5rem;
+    background-color: #f9f9f9; /* Light gray background for details */
+    padding: 1rem;
+    border: 1px solid #ddd; /* Border around details */
+    border-radius: 8px; /* Rounded corners for details */
+  }

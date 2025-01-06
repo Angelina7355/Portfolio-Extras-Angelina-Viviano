@@ -1,0 +1,146 @@
+/* Style for the main heading (h1) */
+h1 {
+    color: #000000; /* Set text color to black */
+    text-align: center; /* Center the heading horizontally */
+    text-shadow: 
+        1px 1px 2px #feb47b, /* Add a black shadow behind the text */
+        0 0 1em #45a049, /* Add a white glow around the text */
+        0 0 0.2em #4C7AAF; /* Further refine the white glow */
+    text-decoration: underline; /* Underline the heading */
+}
+
+/* General styles for the body of the page */
+body {
+    font-family: Arial, sans-serif; /* Use Arial font or fallback to sans-serif */
+    background-color: #edf6ff; /* Set a light gray background color */
+    padding: 20px; /* Add padding around the content */
+    margin: 0; /* Remove the default margin around the body */
+}
+
+/* Styles for a top panel */
+.top-panel {
+    height: 20px; /* Set height of the panel to 100 pixels */
+    background: linear-gradient(to right, #45a049, #feb47b, #4C7AAF); /* Gradient colors */
+    width: 100%; /* Make the panel take up the full width of the page */
+    border-radius: 2px;
+    margin: 20px 0;
+}
+
+/* Styles for individual posts */
+.post {
+    background-color: white; /* Set the background color of the post to white */
+    border: 1px solid #4C7AAF; /* Add a 1px solid blue border around the post */
+    border-radius: 10px; /* Round the corners of the post */
+    padding: 15px; /* Add padding inside the post */
+    margin-bottom: 20px; /* Add space below each post */
+    box-shadow: 2px 2px 5px #4C7AAF; /* Add a shadow to make the post pop */
+    width: 90%;
+}
+
+/* Styles for the post title (h2) inside each post */
+.post h2 {
+    margin-top: 0; /* Remove the default margin at the top of the title */
+    font-size: 1.5em; /* Set the font size to 1.5 times the base size */
+    color: #4C7AAF; /* Set the title text color to blue */
+}
+
+/* Styles for paragraph text inside the posts */
+.post p {
+    font-size: 1em; /* Set the paragraph text to normal size */
+    color: #555; /* Use a dark gray color for the paragraph text */
+}
+
+.post-separator {
+    height: 4px;
+    background: linear-gradient(to right, #45a049, #feb47b, #4C7AAF); /* Gradient colors */
+    border-radius: 2px;
+    margin: 20px 0;
+}
+
+/* Styles for individual comments */
+.comment {
+    background-color: #cbd7e5; /* Set the background color of the post to white */
+    border: 1px solid #4C7AAF; /* Add a 1px solid blue border around the post */
+    border-radius: 30px; /* Round the corners of the post */
+    padding: 10px; /* Add padding inside the post */
+    margin-bottom: 5px; /* Add space below each post */
+    box-shadow: 2px 2px 5px #4C7AAF; /* Add a shadow to make the post pop */
+    width: 60%;
+}
+
+/* Styles for paragraph text inside the posts */
+.comment p {
+    font-size: 0.8em; /* Set the paragraph text to normal size */
+    color: #434343; /* Use a dark gray color for the paragraph text */
+}
+
+/* Main content area for posts */
+.main-content {
+    flex: 1; /* Allow the main content area to grow and take up available space */
+}
+
+/* Flexbox container to separate sidebar and main content */
+.container {
+    display: flex; /* Enable flexbox layout for this container */
+    flex-direction: row-reverse; /* Display the child elements (sidebar and content) in reverse row order (right-to-left) */
+    margin: 10px; /* Add 10px of space around the container */
+}
+
+/* Sidebar styles where the button is located */
+.sidebar {
+    width: 130px; /* Set the width of the sidebar to 130px */
+    margin-left: 30px; /* Add 30px of space on the left side of the sidebar */
+    margin-top: 50px; /* Add 50px of space above the sidebar */
+}
+
+/* Styles for the post button */
+.alpha-button {
+    background-color: #4caf50; /* Set a green background color */
+    color: white; /* Set the text color to white */
+    padding: 10px 20px; /* Add padding around the button */
+    border: none; /* Remove the default button border */
+    border-radius: 5px; /* Add rounded corners to the button */
+    cursor: pointer; /* Change the cursor to a pointer when hovering over the button */
+    font-size: 16px; /* Set the button text size */
+}
+
+/* Change the button color when hovered over */
+.alpha-button:hover {
+    background-color: #45a049; /* Make the green background darker on hover */
+}
+
+.beta-button {
+    background-color: #4caf50; /* Set a green background color */
+    color: white; /* Set the text color to white */
+    padding: 5px 10px; /* Add padding around the button */
+    border: none; /* Remove the default button border */
+    border-radius: 5px; /* Add rounded corners to the button */
+    cursor: pointer; /* Change the cursor to a pointer when hovering over the button */
+    font-size: 12px; /* Set the button text size */
+ }
+
+ /* Change the button color when hovered over */
+.beta-button:hover {
+    background-color: #45a049; /* Make the green background darker on hover */
+}
+
+.beta-button2 {
+    background-color: #4C7AAF; /* Set a green background color */
+    color: white; /* Set the text color to white */
+    padding: 5px 10px; /* Add padding around the button */
+    border: none; /* Remove the default button border */
+    border-radius: 5px; /* Add rounded corners to the button */
+    cursor: pointer; /* Change the cursor to a pointer when hovering over the button */
+    font-size: 12px; /* Set the button text size */
+ }
+
+ /* Change the button color when hovered over */
+.beta-button2:hover {
+    background-color: #446b98; /* Make the green background darker on hover */
+}
+
+.button-container {
+    display: flex;         /* Enables flexbox */
+    gap: 10px;            /* Adds space between buttons */
+}
+ 

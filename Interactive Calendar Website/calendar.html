@@ -1,0 +1,591 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head> 
+    <title> Calendar HTML Form </title> 
+    <link rel="stylesheet" href="calendar_stylesheet.css">
+</head>
+<body>
+    <h1>Silly Little Calendar</h1>
+<!-- This form is to allow a user to login using username and password -->
+    <form id="enter">
+        <h2>Please login below:</h2>
+        <p>
+            <label for="userNameInput">Username:</label>
+            <input type="text" name="username" id="userNameInput">
+        </p>
+        <p>
+            <label for="userPasswordInput">Password:</label>
+            <input type="password" name="password" id="userPasswordInput">
+        </p>
+        <p>
+            <input type="submit" value="Login" id="signIn">
+        </p>
+    </form>
+<!-- Allows the user to create an account by creating a username and password -->
+    <form id="create">
+        <h2>Create a new account:</h2>
+        <p>
+            <label for="newUser">Username:</label>
+            <input type="text" name="newUsername" id="newUser">
+        </p>
+        <p>
+            <label for="newPass">Password:</label>
+            <input type="password" name="newPassword" id="newPass">
+        </p>
+        <p>
+            <input type="submit" value="Create account" id="newAccount">
+        </p>
+    </form>
+
+    <div class = "button-container-logout" id = "logout_btn">
+        <button type="button" id="logout" class = "button-primary">Logout</button>
+    </div>
+
+    <div class = "button-container">
+        <button type="button" id="prev_month_btn" class = "button-primary">Previous Month</button>
+        <button type="button" id="next_month_btn" class = "button-primary">Next Month</button>
+    </div>
+
+    <div id="calendar">
+        <div id="current-month" class="month-display"></div> <!-- for displaying the current month and year -->
+        <div class="calendar-header">
+            <!-- Day names (Sun, Mon, etc.) -->
+            <div class="day">Sun</div>
+            <div class="day">Mon</div>
+            <div class="day">Tue</div>
+            <div class="day">Wed</div>
+            <div class="day">Thu</div>
+            <div class="day">Fri</div>
+            <div class="day">Sat</div>
+        </div>
+        <div class="calendar-grid"></div> <!-- a designated area in the HTML document where JavaScript can insert or update the content dynamically for the days of the month with each calendar load for each month -->
+    </div>
+
+    <div class = "button-container" id = hidden_first_btn style = "display: none">
+        <!-- Create make a post button -->
+        <button type = "button" value = "Post an Event" class="button-primary" id = "event_btn"> Create Event</button>
+        <!-- Creat a search for event buttn -->
+        <button type = "button" value = "Search for Event" class="button-primary" id = "search_btn"> Search for Event</button>
+
+    </div>
+            <!-- These buttons only appear when a logged in user wants to make a change to an event -->
+            <div class = "button-container" id = hidden_btns style ="display: none;">
+            <button type = "button" value = "Edit an Event" class="button-primary" id = "edit_event_btn"> Edit Event</button>
+            <button type = "button" value = "Delete an Event" class="button-primary" id = "delete_event_btn"> Delete Event</button>
+        </div>
+
+        <!-- Shows the event information insertion when "create event" button is pressed -->
+    <div id="event-form-container" style="display: none;">
+        <h3>Create a New Event</h3>
+        <input type="text" id="event-title" placeholder="Event Title" ><br>
+        <input type="time" id="event-time" ><br>
+        <input type="number" id="event-day" placeholder="Day (1-31)" min="1" max="31" ><br>
+        <input type="number" id="event-month" placeholder="Month (1-12)" min="1" max="12" ><br>
+        <input type="number" id="event-year" placeholder="Year" min="0" max="9999" ><br>
+        <!-- Has a drop down for the different options of tags -->
+        <label for="event-tag">Tag:</label>
+        <select id="event-tag">
+            <option value="none">None</option>
+            <option value="school">School</option>
+            <option value="work">Work</option>
+            <option value="personal">Personal</option>
+            <option value="appointment">Appointment</option>
+            <option value="other">Other</option>
+        </select><br>
+
+        <button type="button" id="submit-event">Submit Event</button>
+    </div>
+    <!-- This only appears when a user wants to look for an event -->
+        <div id="search-form-container" style="display: none;">
+        <h3>Enter the title of event </h3>
+        <input type="text" id="find-title" placeholder="Event Title" ><br>
+        <button type="button" id="search_event">Search Event</button>
+        </div>
+
+        <!-- When a user wants to mody and edit an existing event -->
+    <div id ="event_edit_form" style ="display: none;">
+        <h3>Edit an Event</h3>
+        <input type="text" id="change-title" placeholder="Event Title" ><br>
+        <input type="time" id="change-time" ><br>
+        <input type="number" id="change-day" placeholder="Day (1-31)" min="1" max="31" ><br>
+        <input type="number" id="change-month" placeholder="Month (1-12)" min="1" max="12" ><br>
+        <input type="number" id="change-year" placeholder="Year" min="0" max="9999" ><br>
+
+        <label for="event-tag">Tag:</label>
+        <select id="change-tag">
+            <option value="none">None</option>
+            <option value="school">School</option>
+            <option value="work">Work</option>
+            <option value="personal">Personal</option>
+            <option value="appointment">Appointment</option>
+            <option value="other">Other</option>
+        </select><br>
+
+        <button type="button" id="change_event">Edit Event</button>
+    </div>
+
+
+    <!-- include jQuery so we can use $ shorthand to easily select elements and handle events in the DOM-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> <!-- Include jQuery -->
+    <script src="http://classes.engineering.wustl.edu/cse330/content/calendar.min.js"></script>     <!-- get external javascript file through the url which describes the calendar functionality logic -->
+
+    <script>
+
+        // Get the real life month and year to set the calendar
+        const currentDate = new Date();
+        let currentMonth = new Month(currentDate.getFullYear(), currentDate.getMonth()); 
+
+
+        $(document).ready(function() {                          // runs only after DOM is fully loaded
+            checkSignIn();                                      // Checks if user is logged in
+            updateMonthDisplay();                               // Only displays this for those that are not logged in
+
+            $("#prev_month_btn").click(function() {             // Change the month when the "Previous Month" button is pressed (based on the button id so uses # syntax for IDs in jQuery)
+                currentMonth = currentMonth.prevMonth();        // update the current month to be the previous month
+                if (localStorage.getItem('hasAccess') === 'false') { 
+                    updateCalendar();    // Whenever the month is updated, we'll need to re-render the calendar in HTML
+                }
+                else{
+                    updateUserCalendar();
+                }
+                updateMonthDisplay();                           // Whenever the month is updated, we'll need to re-render the month and year displayed
+            });
+
+            $("#next_month_btn").click(function() {             // Change the month when the "Next Month" button is pressed (based on the button id so uses # syntax for IDs in jQuery)
+                currentMonth = currentMonth.nextMonth();        // update the current month to be the next month
+                if (localStorage.getItem('hasAccess') === 'false') {
+                    updateCalendar();   
+                }
+                else{
+                    updateUserCalendar();
+                }                           
+                updateMonthDisplay();                          
+            });
+
+            $("#event_btn").click(function(){
+                $("#event-form-container").show(); // Show the event form container
+            });
+
+            $("#submit-event").click(function(){ // Inserts event to database
+               createEvent();
+            });
+
+            $("#search_btn").click(function(){
+                $("#search-form-container").show(); // Shows text boxes to search an event
+            })
+
+            $("#search_event").click(function(){
+                searchEvent();
+            })
+
+            $("#logout").click(function() {
+                // Perform logout logic
+                fetch('logout.php', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            alert("Logging out");
+                            localStorage.setItem('hasAccess', 'false'); // Clear access status
+                            $("#enter").show();                         // Hides all text boxes since person is not logged in
+                            $("#create").show();
+                            $("#hidden_first_btn").hide();
+                            $("#logout_btn").hide();
+                            $("#hidden_btns").hide();
+                            $("#event-form-container").hide();
+                            $("#search-form-container").hide();
+                            $("#event_edit_form").hide();
+
+                            updateCalendar();                       // Show guest calendar
+                        } else {
+                            alert(result.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert(error.message || "An unexpected error occurred while logging out");
+                    });
+            });
+
+        });
+
+
+        function login(btn) {
+            btn.preventDefault(); // Prevent default form submission
+            
+            const user = document.getElementById("userNameInput").value;  //Grabs user and pass from text box
+            const pass = document.getElementById("userPasswordInput").value;
+
+            const data = new FormData();
+            data.append('username', user);
+            data.append('password', pass);
+            data.append('action', 'Login');
+
+            fetch('login.php', { // Sends info to create a session var. and also verify credentials 
+                method: 'POST',
+                body: data
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    localStorage.setItem('hasAccess', 'true'); // Set access when user logs in
+                    document.getElementById("userNameInput").value = '';  // Clears the text boxes
+                    document.getElementById("userPasswordInput").value = '';
+                    alert("Welcome back!"); 
+                    checkSignIn();
+                } 
+                else {
+                    alert(result.message);
+                    document.getElementById("userNameInput").value = '';
+                    document.getElementById("userPasswordInput").value = '';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById("userNameInput").value = '';
+                document.getElementById("userPasswordInput").value = '';
+            });
+        }
+
+        function createAccount(btn) {
+            btn.preventDefault(); // Prevent default form submission
+            
+            const user = document.getElementById("newUser").value;   // Same as login except it creates account and inputs the new account in database
+            const pass = document.getElementById("newPass").value;
+
+            const data = new FormData();
+            data.append('newUsername', user);
+            data.append('newPassword', pass);
+            data.append('action', 'Create account');
+
+            fetch('login.php', {
+                method: 'POST',
+                body: data
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    localStorage.setItem('hasAccess', 'true'); // Set access when user logs in
+                    document.getElementById("newUser").value = '';
+                    document.getElementById("newPass").value = '';
+                    alert("Account Made! Welcome!"); 
+                    checkSignIn();   // This is so that they can make,edit,delete events now
+                } 
+                else {
+                    alert(result.message);
+                    document.getElementById("newUser").value = '';
+                    document.getElementById("newPass").value = '';
+                }
+            })
+            .catch(error => {
+            console.error('Error:', error);
+            alert('Username is taken, try another one.');
+            document.getElementById("newUser").value = '';
+            document.getElementById("newPass").value = '';
+            });
+
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const loginForm = document.getElementById("enter");      // If buttons for login or create accounts are pressed then it calls funcs.
+            loginForm.addEventListener("submit", login);
+
+            const createAccountForm = document.getElementById("create");
+            createAccountForm.addEventListener("submit", createAccount);
+        });
+
+
+
+        function getTagColor(tag) {
+            let tagColor = '#FFFFFF'
+            if (tag == 'none') {
+                tagColor = "#d8d8ff";   // light indigo
+            }
+            else if (tag == 'school') {
+                tagColor = "#ccfecb";   // light green
+            }
+            else if (tag == 'work') {
+                tagColor = "#ffc3d7";   // light red
+            }
+            else if (tag == 'personal') {
+                tagColor = "#ccfefd";   // light teal
+            }
+            else if (tag == 'appointment') {
+                tagColor = "#ffeeca";   // light orange
+            }
+            else if (tag == 'other') {
+                tagColor = "#efccfd";   // light pink
+            }
+            else {
+                tagColor = "#ffffff";
+            }
+            
+            return tagColor;
+        }
+
+
+        // modifies the DOM (optionally using jQuery) to display the days and weeks in the current month (Login view)
+        function updateUserCalendar() {
+            let weeks = currentMonth.getWeeks();
+            let calendarHTML = "";
+
+            // Build the calendar grid first
+            for (let w in weeks) {
+                let days = weeks[w].getDates();
+
+                for (let d in days) {
+                    let dayDate = days[d].getDate();
+                    let dayMonth = days[d].getMonth() + 1;
+                    let dayClass = "day-cell";
+
+                    if (days[d].getMonth() !== currentMonth.month) {
+                        dayClass += " other-month";
+                    }
+                    
+                    calendarHTML += `<div id="day-${dayDate}-${dayMonth}" class="${dayClass}">${dayDate}</div>`;
+                }
+            }
+
+            // Update calendar grid in DOM
+            $(".calendar-grid").html(calendarHTML);
+
+            // Fetch events for current month and update cells with events
+            weeks.forEach((week) => {
+                week.getDates().forEach((date) => {
+                    if (date.getMonth() === currentMonth.month) {
+                        const day = date.getDate();
+                        const month = currentMonth.month + 1;
+                        const year = currentMonth.year;
+
+                        fetch(`event.php?month=${month}&year=${year}&day=${day}`) // Makes a call to php to get events for the logged in user
+                            .then(response => response.json())
+                            .then(events => {
+                                let eventsHTML = '';
+
+                                // Get the day element by its ID
+                                const dayElement = document.getElementById(`day-${day}-${month}`);
+                                
+                                if ((events.length > 0)) {                          // If event exists for specific day then show on calendar
+                                    eventsHTML = `<div class="events-container">`;  // Displays, title and time
+                                    eventsHTML += events.map(event => `
+                                        <div class="event-item" style="background-color: ${getTagColor(event.tag)};"> 
+                                            <strong>${event.title}</strong><br> ${event.time}
+                                            <button onclick="modifyEvent(${event.event_id})">Modify</button>
+                                        </div>
+                                    `).join("");
+                                    eventsHTML += `</div>`;
+                                    $(dayElement).prepend(eventsHTML);  // Makes a button thats related to each event id to use for editing or deleting 
+                                }
+                            })
+                            .catch(error => console.error("Error fetching events:", error));
+                    }
+                });
+            });
+        }
+
+
+        function updateCalendar() {         // Same as method above but for guests (Does not check for events)
+            let weeks = currentMonth.getWeeks();
+            let calendarHTML = "";
+
+            // Build the calendar grid first
+            for (let w in weeks) {
+                let days = weeks[w].getDates();
+
+                for (let d in days) {
+                    let dayDate = days[d].getDate();
+                    let dayMonth = days[d].getMonth() + 1;
+                    let dayClass = "day-cell";
+
+                    if (days[d].getMonth() !== currentMonth.month) {
+                        dayClass += " other-month";
+                    }
+                    
+                    calendarHTML += `<div id="day-${dayDate}-${dayMonth}" class="${dayClass}">${dayDate}</div>`;
+                }
+            }
+
+            // Update calendar grid in DOM
+            $(".calendar-grid").html(calendarHTML);
+        }
+
+        // Function to display the current month and year above the calendar
+        function updateMonthDisplay() {
+            // Get the month name (e.g., October) and year (e.g., 2024)
+            const monthNames = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            const monthName = monthNames[currentMonth.month]; // Get the name of the current month
+            const year = currentMonth.year; // Get the current year
+
+            // Update the inner HTML of the div with id="current-month"
+            $("#current-month").html(`${monthName} ${year}`);
+        }
+
+        function createEvent(){ // This function takes in all the inputs from user to create and event and store in database
+            const data = 
+            {title: $("#event-title").val(), 
+            time: $("#event-time").val(), 
+            day: $("#event-day").val(),
+            month: $("#event-month").val(), 
+            year: $("#event-year").val(),
+            tag: $("#event-tag").val()};
+
+            fetch('event.php', { // Sends as POST type 
+                method: 'POST',
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    alert("Event Uploaded!");
+                    document.getElementById("event-title").value = '';  // Resets the input vals. and hides the inputs.
+                    document.getElementById("event-time").value = '00:00';
+                    document.getElementById("event-day").value = '';
+                    document.getElementById("event-month").value = '';
+                    document.getElementById("event-year").value = '';
+                    document.getElementById("event-tag").value = 'none';
+                    $("#event-form-container").hide();
+                    updateUserCalendar();  // Updates to show new event
+
+                } else {
+                    alert(result.message);
+                }
+            })
+            .catch(error => {
+            console.error('Error:', error);
+            alert(error.message || "An unexpected error has ocurred");
+            
+            });
+        }
+
+        function modifyEvent(eventId) {
+            // Show the hidden buttons container
+            $("#hidden_btns").show();
+
+            // Clear previous event listeners to avoid duplicates
+            $("#delete_event_btn").off("click");
+            $("#edit_event_btn").off("click");
+
+            // Add click event listener for delete button
+            $("#delete_event_btn").click(function() {
+                deleteEvent(eventId);  // Pass eventId to the delete function
+                $("#hidden_btns").hide();  // Hide the buttons again after action
+            });
+
+            // Add click event listener for edit button
+            $("#edit_event_btn").click(function() {
+                // Show the event edit form
+                $("#event_edit_form").show();
+                
+                // Ensure change_event button triggers editEvent only once
+                $("#change_event").off("click").click(function() {
+                    editEvent(eventId);  // Pass eventId to the edit function
+                    $("#hidden_btns").hide();  // Hide the buttons again after action
+                    $("#event_edit_form").hide();  // Hide the edit form
+                });
+            });
+        }
+
+function editEvent(eventId) {
+    // Collect updated data from the from inputs
+    const data = {
+        event_id: eventId,  // Include event ID for editing
+        title: $("#change-title").val(),
+        time: $("#change-time").val(),
+        day: $("#change-day").val(),
+        month: $("#change-month").val(),
+        year: $("#change-year").val(),
+        tag: $("#change-tag").val()
+    };
+
+    // Send the edited event data to the server
+    fetch('event.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            alert("Event Edited Successfully!");
+            updateUserCalendar();  // Refresh the calendar to reflect the updated event
+        } else {
+            alert(result.message);
+        }
+    })
+    .catch(error => console.error('Error editing event:', error));
+}
+
+        function deleteEvent(eventId) { // Deletes the posts based on event_id
+
+            fetch('event.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }, 
+                body: JSON.stringify({
+                event_id: eventId // Only passing event_id
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                updateUserCalendar();  // Refresh the calendar to reflect the updated event
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => console.error("Error deleting event:", error));
+}
+
+
+function checkSignIn() {
+    if (localStorage.getItem('hasAccess') === 'true') {
+        // User is logged in
+        $("#enter").hide();
+        $("#create").hide();
+        $("#hidden_first_btn").show();
+        $("#logout_btn").show();
+        updateUserCalendar(); // Load the user's calendar
+    } 
+    else {
+        // User is not logged in
+        $("#enter").show();
+        $("#create").show();
+        $("#hidden_first_btn").hide();
+        $("#logout_btn").hide();
+        updateCalendar();
+    }
+}
+
+function searchEvent() {
+    const title = document.getElementById("find-title").value; // Get the input value
+
+    fetch(`event.php?title=${(title)}`) // Allows one to search for event based on title 
+    .then(response => response.json())
+    .then(events => { // Directly access the events
+        if (events.length > 0) {
+            let message = "Events found:\n";
+            events.forEach(event => {
+                message += `Month: ${event.month}, Day: ${event.day}\n`;  // Displays the month # and day # to find
+            });
+            alert(message);
+            $("#search-form-container").hide();
+            document.getElementById("find-title").value = '';
+
+        } else {
+            alert("No events found with that title.");
+        }
+    })
+    .catch(error => console.error('Error searching event:', error));
+}
+
+    </script>
+
+
+</body>
+</html>
